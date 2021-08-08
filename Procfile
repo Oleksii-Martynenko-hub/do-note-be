@@ -1,1 +1,1 @@
-web: node --unhandled-rejections=strict index.js
+web: node index.js
