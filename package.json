@@ -1,0 +1,19 @@
+{
+  "name": "notes-tasks-be",
+  "version": "1.0.0",
+  "description": "server for \"Notes and Tasks\" app",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Oleksii Martynenko",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+  },
+  "engines": {
+    "node": "12.x"
+  }
+}
