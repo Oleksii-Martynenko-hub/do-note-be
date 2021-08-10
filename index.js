@@ -1,32 +1,36 @@
 require('dotenv').config()
 const express = require('express');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
+const usersRoutes = require('./src/routes/users');
+const authRoutes = require('./src/routes/auth');
 
-const usersRoutes = require('./routes/users');
-const authRoutes = require('./routes/auth');
+const { PORT, MONGO_URI } = process.env;
 
 const app = express();
 
-const port = process.env.PORT
-const URI = process.env.MONGO_URI;
-
-mongoose
-  .connect(URI,
-  { 
-    useFindAndModify: false,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true
-  })
-  .then((res) => console.log('Connected!'))
-  .catch((err) => console.log('error connect', err))
-  
-
 app.use(express.json());
-app.use(usersRoutes)
+app.use(cookieParser());
+app.use(cors());
+
+app.use(usersRoutes);
 app.use(authRoutes);
+
 app.use((req, res, next) => res.status(404).send(['page not found']));
 
-app.listen(port);
+const start = async () => {
+  try {
+    await mongoose.connect(MONGO_URI, { 
+      useFindAndModify: false,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true
+    })
+    
+    app.listen(PORT, () => console.log(`Server started on ${PORT}`));
+  } catch (e) {console.log(e);}
+}
+
+start();

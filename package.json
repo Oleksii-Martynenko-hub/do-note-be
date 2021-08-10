@@ -2,6 +2,7 @@
   "name": "notes-tasks-be",
   "version": "1.0.0",
   "description": "server for \"Notes and Tasks\" app",
+  "repository": {},
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js"
@@ -10,8 +11,12 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-validator": "^6.12.1",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.1.0",
     "mongodb-client-encryption": "^1.2.6",
     "mongoose": "^5.13.5",
