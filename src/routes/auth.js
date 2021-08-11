@@ -10,8 +10,8 @@ router.post('/login', authController.login);
 
 router.post('/logout', authController.logout);
 
-router.post('/confirm/:link', authController.confirm);
+router.get('/confirm/:link', authController.confirm);
 
-router.post('/refresh', authController.refresh);
+router.get('/refresh', authController.refresh);
 
 module.exports = router;

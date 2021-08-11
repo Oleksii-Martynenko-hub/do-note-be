@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 
 const usersRoutes = require('./src/routes/users');
 const authRoutes = require('./src/routes/auth');
+const errorMiddleware = require('./src/middlewares/error-middleware');
 
 const { PORT, MONGO_URI } = process.env;
 
@@ -17,6 +18,8 @@ app.use(cors());
 
 app.use(usersRoutes);
 app.use(authRoutes);
+
+app.use(errorMiddleware);
 
 app.use((req, res, next) => res.status(404).send(['page not found']));
 

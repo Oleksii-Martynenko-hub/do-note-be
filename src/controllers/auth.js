@@ -63,35 +63,37 @@ class AuthController {
       res.cookie('refreshToken', userData.refreshToken, { maxAge: 30*24*60*60*1000, httpOnly: true});
       return res.json(userData);
     } catch (e) {
-      
+      next(e);
     }
   }
   async login(req, res, next) {
     try {
       
     } catch (e) {
-      
+      next(e);
     }
   }
   async logout(req, res, next) {
     try {
       
     } catch (e) {
-      
+      next(e);
     }
   }
   async confirm(req, res, next) {
     try {
-      
+      const confirmLink = req.params.link;
+      await AuthService.confirm(confirmLink);
+      return res.redirect(process.env.CLIENT_URL);
     } catch (e) {
-      
+      next(e);
     }
   }
   async refresh(req, res, next) {
     try {
       
     } catch (e) {
-      
+      next(e);
     }
   }
 }
