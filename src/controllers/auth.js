@@ -1,65 +1,19 @@
-// const bcrypt = require('bcryptjs');
-// const nodemailer = require('nodemailer');
-// const sendGrid = require('nodemailer-sendgrid-transport');
+const authService = require('../services/auth');
+const { validationResult } = require('express-validator');
 
-const AuthService = require('../services/auth');
+const ApiError = require('../exceptions/api-error');
 
-// const transport = nodemailer.createTransport(sendGrid({
-//   auth: { api_key: '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'}
-// }))
-
-// const token = 'kljhLKJDhflkh3983YFyhedh23iohnfs8D';
-
-// exports.signup = (req, res, next) => {
-//   const { name, email, password, confirmPassword } = req.body;
-//   User.findOne({ email })
-//     .then((user) => {
-//       if (user) return res.send('User with this email exist');
-//       if ( password !== confirmPassword ) return res.send('Passwords differ');
-//       bcrypt.hash(password, 10)
-//         .then((hashPassword) => {
-//           const newUser = new User({ 
-//             name,
-//             email,
-//             password: hashPassword
-//           });
-//           newUser.save();
-//           res.send('Successfully signup');
-//         })
-//         .then(res => {
-//           transport.sendMail({
-//             to: email,
-//             from: 'alex47alex50@gmail.com',
-//             subject: 'Successfully signup',
-//             html: `<h1 style="color: #00ff00;" >Successfully signup</h1><p style="color: #0000ff;">Hi, ${name}! Congratulation, you have account of Notes&Tasks!!!</p>`
-//           })
-//         })
-//         .catch(err => console.log(err));
-//     });
-// };
-
-// exports.login = (req, res, next) => {
-//   const { email, password } = req.body;
-//   User.findOne({ email })
-//     .then((user) => {
-//       if (!user) return res.send('User with this email not exist');
-//       bcrypt.compare(password, user.password)
-//         .then((isValid) => {
-//           if ( !isValid ) return res.send('Password invalid');
-//           res.json(user._id.toString() + '.' + token);
-//         })
-//         .catch((err) => {
-//           console.log(err);
-//           res.send('server error');
-//         });
-//     });
-// };
+//  if ( password !== confirmPassword ) return res.send('Passwords differ');
 
 class AuthController {
   async signup(req, res, next) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+          return next(ApiError.BadRequest('Error validation', errors.array()))
+      }
       const { email, password } = req.body;
-      const userData = await AuthService.signup(email, password);
+      const userData = await authService.signup(email, password);
       res.cookie('refreshToken', userData.refreshToken, { maxAge: 30*24*60*60*1000, httpOnly: true});
       return res.json(userData);
     } catch (e) {
@@ -68,14 +22,20 @@ class AuthController {
   }
   async login(req, res, next) {
     try {
-      
+      const { email, password } = req.body;
+      const userData = await authService.login(email, password);
+      res.cookie('refreshToken', userData.refreshToken, { maxAge: 30*24*60*60*1000, httpOnly: true});
+      return res.json(userData);
     } catch (e) {
       next(e);
     }
   }
   async logout(req, res, next) {
     try {
-      
+      const {refreshToken} = req.cookies;
+      const token = await authService.logout(refreshToken);
+      res.clearCookie('refreshToken');
+      return res.json(token);
     } catch (e) {
       next(e);
     }
@@ -83,7 +43,7 @@ class AuthController {
   async confirm(req, res, next) {
     try {
       const confirmLink = req.params.link;
-      await AuthService.confirm(confirmLink);
+      await authService.confirm(confirmLink);
       return res.redirect(process.env.CLIENT_URL);
     } catch (e) {
       next(e);
@@ -91,7 +51,10 @@ class AuthController {
   }
   async refresh(req, res, next) {
     try {
-      
+      const {refreshToken} = req.cookies;
+      const userData = await authService.refresh(refreshToken);
+      res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+      return res.json(userData);
     } catch (e) {
       next(e);
     }

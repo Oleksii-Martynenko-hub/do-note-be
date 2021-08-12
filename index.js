@@ -4,11 +4,14 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
+const envsToHeroku = require('./src/utils/envs-to-heroku');
 const usersRoutes = require('./src/routes/users');
 const authRoutes = require('./src/routes/auth');
 const errorMiddleware = require('./src/middlewares/error-middleware');
 
 const { PORT, MONGO_URI } = process.env;
+
+// envsToHeroku(); // add environment variables from env.json to .env and heroku config
 
 const app = express();
 

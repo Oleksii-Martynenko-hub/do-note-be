@@ -18,7 +18,7 @@ class AuthService {
         await mailService.sendConfirmMail(email, confirmLink);
         const userDto = new UserDto(user);
         const tokens = tokenService.generate({...userDto});
-        await tokenService.saveToken(userDto.id, tokens.refreshToken);
+        await tokenService.save(userDto.id, tokens.refreshToken);
 
         return { ...tokens, user: userDto }
     }
@@ -28,6 +28,44 @@ class AuthService {
         if (!user) {throw ApiError.BadRequest(`This link isn't correct!`);}
         user.isConfirmed = true;
         await user.save();
+    }
+
+    async login(email, password) {
+        const user = await User.findOne({email})
+        if (!user) {
+            throw ApiError.BadRequest(`User ${email} not exist!`)
+        }
+        const isPassEquals = await bcrypt.compare(password, user.password);
+        if (!isPassEquals) {
+            throw ApiError.BadRequest('Invalid password!');
+        }
+        const userDto = new UserDto(user);
+        const tokens = tokenService.generate({...userDto});
+
+        await tokenService.save(userDto.id, tokens.refreshToken);
+        return {...tokens, user: userDto}
+    }
+
+    async logout(refreshToken) {
+        const token = await tokenService.remove(refreshToken);
+        return token;
+    }
+
+    async refresh(refreshToken) {
+        if (!refreshToken) {
+            throw ApiError.UnauthorizedError();
+        }
+        const userData = tokenService.validateRefresh(refreshToken);
+        const tokenFromDb = await tokenService.find(refreshToken);
+        if (!userData || !tokenFromDb) {
+            throw ApiError.UnauthorizedError();
+        }
+        const user = await User.findById(userData.id);
+        const userDto = new UserDto(user);
+        const tokens = tokenService.generate({...userDto});
+
+        await tokenService.save(userDto.id, tokens.refreshToken);
+        return {...tokens, user: userDto}
     }
 }
 

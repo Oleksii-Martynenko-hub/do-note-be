@@ -20,6 +20,7 @@ build/
 # env files
 *.env.local
 *.env
+env.json
 
 # vscode files
 *.vscode
