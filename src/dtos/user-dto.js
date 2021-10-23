@@ -4,6 +4,7 @@ module.exports = class UserDto {
     name;
     avatar;
     isConfirmed;
+    data;
 
     constructor(model) {
         this.id = model._id;
@@ -11,5 +12,6 @@ module.exports = class UserDto {
         this.name = model.name;
         this.avatar = model.avatar;
         this.isConfirmed = model.isConfirmed;
+        this.data = model.data;
     }
 }

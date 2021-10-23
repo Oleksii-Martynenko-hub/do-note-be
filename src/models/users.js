@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, SchemaTypes } = require('mongoose');
 
 const UserSchema = new Schema({
   email: {
@@ -23,6 +23,9 @@ const UserSchema = new Schema({
   },
   confirmLink: {
     type: String
+  },
+  data: {
+    type: SchemaTypes.Mixed
   }  
 });
 

@@ -8,6 +8,7 @@ const envsToHeroku = require('./src/utils/envs-to-heroku');
 const usersRoutes = require('./src/routes/users');
 const authRoutes = require('./src/routes/auth');
 const errorMiddleware = require('./src/middlewares/error-middleware');
+const authMiddleware = require('./src/middlewares/auth-middleware');
 
 const { PORT, MONGO_URI } = process.env;
 
@@ -19,8 +20,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
-app.use(usersRoutes);
 app.use(authRoutes);
+app.use(authMiddleware, usersRoutes);
 
 app.use(errorMiddleware);
 

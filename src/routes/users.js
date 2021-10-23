@@ -10,6 +10,8 @@ router.get('/user/:id', usersControllers.userById);
 
 router.post('/user/edit', usersControllers.editUser);
 
+router.post('/user/edit-data', usersControllers.editUserData);
+
 router.get('/user/:id/delete', usersControllers.deleteUser);
 
 router.get('/user/:id/reverse-name', usersControllers.reverseNameUser);

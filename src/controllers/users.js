@@ -14,9 +14,17 @@ exports.userById = (req, res, next) => {
 };
 
 exports.editUser = (req, res, next) => {
-  const [stringId, tokenReq] = req.body.accessToken.split('.');
-  if (token !== tokenReq) return res.send('token invalid')
-  User.findByIdAndUpdate(stringId, req.query).then((user) => {
+  const {user_id, user} = req.body;
+
+  User.findByIdAndUpdate(stringId, user).then((user) => {
+    User.findById(user._id).then((userById) => res.send(userById));
+  });
+};
+
+exports.editUserData = (req, res, next) => {
+  const {user_id, data} = req.body;
+
+  User.findByIdAndUpdate(user_id, { data }).then((user) => {
     User.findById(user._id).then((userById) => res.send(userById));
   });
 };
