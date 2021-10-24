@@ -26,7 +26,9 @@ const UserSchema = new Schema({
   },
   data: {
     type: SchemaTypes.Mixed,
-    default: {}
+    default: {
+      default_key: "default_value"
+    }
   }  
 });
 
