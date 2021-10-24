@@ -16,7 +16,7 @@ class MailService {
     }
 
     async sendConfirmMail(to, link) {
-        await this.transport.sendMail({
+        const send = await this.transport.sendMail({
             from: SMTP_USER,
             to,
             subject: `Account confirmation  for ${API_URL}!`,
@@ -32,6 +32,7 @@ class MailService {
                 </div>
             `
         })
+        console.log(send);
     }
 }
 
