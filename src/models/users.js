@@ -25,7 +25,8 @@ const UserSchema = new Schema({
     type: String
   },
   data: {
-    type: SchemaTypes.Mixed
+    type: SchemaTypes.Mixed,
+    default: {}
   }  
 });
 
