@@ -14,7 +14,6 @@ class AuthService {
         const hashPassword = await bcrypt.hash(password, 6);
         const confirmLink = uuid.v4();
         const user = await User.create({ email, password: hashPassword, confirmLink });
-        // console.log('work');
         await mailService.sendConfirmMail(email, confirmLink);
         const userDto = new UserDto(user);
         const tokens = tokenService.generate({...userDto});
