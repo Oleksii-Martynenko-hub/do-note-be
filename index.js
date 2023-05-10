@@ -3,12 +3,21 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const cron = require('node-cron');
 
 const envsToHeroku = require('./src/utils/envs-to-heroku');
 const usersRoutes = require('./src/routes/users');
 const authRoutes = require('./src/routes/auth');
 const errorMiddleware = require('./src/middlewares/error-middleware');
 const authMiddleware = require('./src/middlewares/auth-middleware');
+const usersControllers = require('./src/controllers/users')
+
+// const task = cron.schedule('*/5 * * * * *', () =>  {
+//   usersControllers.deleteOldTokens();
+// });
+
+// task.start();
+// task.destroy();
 
 const { PORT, MONGO_URI } = process.env;
 

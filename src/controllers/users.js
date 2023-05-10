@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('../models/users');
+const Token = require('../models/token');
 
 const token = 'kljhLKJDhflkh3983YFyhedh23iohnfs8D';
 
@@ -42,4 +43,25 @@ exports.reverseNameUser = (req, res, next) => {
 
 exports.allUsers = (req, res, next) => {
   User.find().then((usersData) => res.send(usersData));
+};
+
+exports.deleteOldTokens = async () => {
+  try {
+    const usersData = await User.find();
+    const tokensData = await Token.find();
+
+    const tokens = [];
+
+    [...usersData].forEach((user) => {
+      const tokenIndex = tokensData.find(token => token.user === user._id)
+      // console.log(tokenIndex);
+      if (tokenIndex) tokensData.push(tokenIndex)
+      // return res;
+    })
+
+    console.log(usersData,tokensData);
+    
+  } catch (e) {
+    
+  }
 };
