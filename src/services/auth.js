@@ -7,43 +7,6 @@ const tokenService = require('./token');
 const UserDto = require('../dtos/user-dto');
 const ApiError = require('../exceptions/api-error');
 
-// async function randomSalt() {
-//     return crypto.randomBytes(64).toString('hex');
-// }
-// function sha256(txt){
-//     const secret = 'abcdefg';
-//     const hash = crypto.createHmac('sha256', secret)
-//                     .update(txt)
-//                     .digest('hex');
-//    return hash;
-// }
-
-
-
-// function encryptAES(plainText, key){
- 
-//     const encrypt = crypto.createCipher('aes256', key);
-//     let encrypted = encrypt.update(plainText, 'utf8', 'hex');
-//     encrypted += encrypt.final('hex')
-//     return encrypted;
-// }
-
-
-
-
-// function decryptAES(encryptedText, key){
-//  try{
-//     const decrypt = crypto.createDecipher('aes256', key);
-//     let decrypted = decrypt.update(encryptedText, 'hex', 'utf8')
-//     decrypted += decrypt.final()
-//     return decrypted
-//  }
-//  catch(ex)
-// {
-//     return ex;
-// }
- 
-// }
 class AuthService {
     async signup(email, password) {
         const candidate = await User.findOne({ email });
