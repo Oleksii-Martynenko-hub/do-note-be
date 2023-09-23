@@ -45,7 +45,7 @@ const start = async () => {
       useCreateIndex: true
     })
     
-    app.listen(PORT, () => console.log(`Server started on ${PORT}`));
+    app.listen(PORT || 8080, () => console.log(`Server started on ${PORT || 8080}`));
   } catch (e) {console.log(e);}
 }
 
